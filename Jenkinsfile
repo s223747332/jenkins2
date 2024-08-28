@@ -48,18 +48,24 @@ pipeline {
 
     post {
         success {
-            emailext(
-                to: 'namnaigamma2chai@gmail.com',
-                subject: "SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                body: "Good news! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has completed successfully."
-            )
+            script {
+                def emailBody = """\
+                Good news! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has completed successfully.
+                """
+                sh """
+                echo '${emailBody}' | mail -s "SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}" namnaigamma2chai@gmail.com
+                """
+            }
         }
         failure {
-            emailext(
-                to: 'namnaigamma2chai@gmail.com',
-                subject: "FAILURE: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                body: "Oops! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has failed. Please check the logs."
-            )
+            script {
+                def emailBody = """\
+                Oops! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has failed. Please check the logs.
+                """
+                sh """
+                echo '${emailBody}' | mail -s "FAILURE: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}" namnaigamma2chai@gmail.com
+                """
+            }
         }
     }
 }
