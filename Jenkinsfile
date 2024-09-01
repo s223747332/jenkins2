@@ -48,18 +48,34 @@ pipeline {
 
     post {
         success {
-            emailext(
-                to: 'namnaigamma2chai@gmail.com',
-                subject: "SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                body: "Good news! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has completed successfully."
-            )
+            script {
+                echo "Sending success email notification..."
+                try {
+                    emailext(
+                        to: 'namnaigamma2chai@gmail.com',
+                        subject: "SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+                        body: "Good news! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has completed successfully."
+                    )
+                    echo "Success email sent."
+                } catch (Exception e) {
+                    echo "Failed to send success email: ${e}"
+                }
+            }
         }
         failure {
-            emailext(
-                to: 'namnaigamma2chai@gmail.com',
-                subject: "FAILURE: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                body: "Oops! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has failed. Please check the logs."
-            )
+            script {
+                echo "Sending failure email notification..."
+                try {
+                    emailext(
+                        to: 'namnaigamma2chai@gmail.com',
+                        subject: "FAILURE: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+                        body: "Oops! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has failed. Please check the logs."
+                    )
+                    echo "Failure email sent."
+                } catch (Exception e) {
+                    echo "Failed to send failure email: ${e}"
+                }
+            }
         }
     }
 }
