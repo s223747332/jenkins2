@@ -47,33 +47,26 @@ pipeline {
     }
 
     post {
-        success {
+        always {
             script {
-                echo "Sending success email notification..."
+                echo "Sending email notification..."
+                def subject = currentBuild.result == 'SUCCESS' ? 
+                              "SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}" :
+                              "FAILURE: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}"
+                
+                def body = currentBuild.result == 'SUCCESS' ?
+                           "Good news! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has completed successfully." :
+                           "Oops! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has failed. Please check the logs."
+                
                 try {
                     emailext(
-                        to: 'fabdullah230@gmail.com',
-                        subject: "SUCCESS: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                        body: "Good news! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has completed successfully."
+                        to: 'namnaigamma2chai0@gmail.com',
+                        subject: subject,
+                        body: body
                     )
-                    echo "Success email sent."
+                    echo "Email sent."
                 } catch (Exception e) {
-                    echo "Failed to send success email: ${e}"
-                }
-            }
-        }
-        failure {
-            script {
-                echo "Sending failure email notification..."
-                try {
-                    emailext(
-                        to: 'fabdullah230@gmail.com',
-                        subject: "FAILURE: ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-                        body: "Oops! The build ${env.BUILD_NUMBER} of job ${env.JOB_NAME} has failed. Please check the logs."
-                    )
-                    echo "Failure email sent."
-                } catch (Exception e) {
-                    echo "Failed to send failure email: ${e}"
+                    echo "Failed to send email: ${e}"
                 }
             }
         }
