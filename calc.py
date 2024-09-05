@@ -12,9 +12,9 @@ def divide(x, y):
         return "Error! Division by zero."
     else:
         return x / y
-    #example change 1
+    #example change 12ds
     #change 2
-    #change final
+    #change finall
 
 def calculator():
     print("Welcome to the Simple Calculator!")
