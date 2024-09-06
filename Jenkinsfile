@@ -106,6 +106,7 @@ pipeline {
                         body: body,
                         attachmentsPattern: "${env.LOG_FILE}", // Attach the  log file
                         attachLog: true // attach Jenkins console log
+                        // added the log file attachment
                     )
                     echo "Email sent with log file attached."
                 } catch (Exception e) {
